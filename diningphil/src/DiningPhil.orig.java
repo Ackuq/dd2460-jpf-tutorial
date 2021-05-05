@@ -23,42 +23,27 @@ public class DiningPhil {
   static class Fork {
   }
 
-  /**
-   * Defined whether the philosopher position is even or odd
-   */
-  enum Position {
-    EVEN, ODD
-  }
-
   static class Philosopher extends Thread {
 
     Fork left;
     Fork right;
-    Position position;
 
-    public Philosopher(Fork left, Fork right, Position position) {
+    public Philosopher(Fork left, Fork right) {
       this.left = left;
       this.right = right;
-      this.position = position;
       start();
     }
 
     public void run() {
       // think!
-      /**
-       * If position is even, start with left fork, otherwise right fork
-       */
-      synchronized (this.position == Position.EVEN ? left : right) {
-        /**
-         * If position is even, use right fork, otherwise left fork
-         */
-        synchronized (this.position == Position.ODD ? right : left) {
+      synchronized (left) {
+        synchronized (right) {
           // eat!
         }
       }
     }
   }
-
+  
   static final int N = 5;
 
   public static void main(String[] args) {
@@ -67,10 +52,7 @@ public class DiningPhil {
       forks[i] = new Fork();
     }
     for (int i = 0; i < N; i++) {
-      /**
-       * If index is even, pass the EVEN enum, otherwise pass ODD enum
-       */
-      new Philosopher(forks[i], forks[(i + 1) % N], i % 2 == 0 ? Position.EVEN : Position.ODD);
+      new Philosopher(forks[i], forks[(i + 1) % N]);
     }
   }
 }

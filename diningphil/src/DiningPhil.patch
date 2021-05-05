@@ -1,0 +1,61 @@
+--- DiningPhil.orig.java	2021-05-05 09:40:35.000000000 +0200
++++ DiningPhil.java	2021-05-05 09:38:47.000000000 +0200
+@@ -23,27 +23,42 @@
+   static class Fork {
+   }
+ 
++  /**
++   * Defined whether the philosopher position is even or odd
++   */
++  enum Position {
++    EVEN, ODD
++  }
++
+   static class Philosopher extends Thread {
+ 
+     Fork left;
+     Fork right;
++    Position position;
+ 
+-    public Philosopher(Fork left, Fork right) {
++    public Philosopher(Fork left, Fork right, Position position) {
+       this.left = left;
+       this.right = right;
++      this.position = position;
+       start();
+     }
+ 
+     public void run() {
+       // think!
+-      synchronized (left) {
+-        synchronized (right) {
++      /**
++       * If position is even, start with left fork, otherwise right fork
++       */
++      synchronized (this.position == Position.EVEN ? left : right) {
++        /**
++         * If position is even, use right fork, otherwise left fork
++         */
++        synchronized (this.position == Position.ODD ? right : left) {
+           // eat!
+         }
+       }
+     }
+   }
+-  
++
+   static final int N = 5;
+ 
+   public static void main(String[] args) {
+@@ -52,7 +67,10 @@
+       forks[i] = new Fork();
+     }
+     for (int i = 0; i < N; i++) {
+-      new Philosopher(forks[i], forks[(i + 1) % N]);
++      /**
++       * If index is even, pass the EVEN enum, otherwise pass ODD enum
++       */
++      new Philosopher(forks[i], forks[(i + 1) % N], i % 2 == 0 ? Position.EVEN : Position.ODD);
+     }
+   }
+ }
