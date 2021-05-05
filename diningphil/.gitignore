@@ -1,0 +1,7 @@
+# Java files
+
+*.class
+
+# Mac files
+
+.DS_Store

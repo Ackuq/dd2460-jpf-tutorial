@@ -1,47 +1,31 @@
-
 ## Error Trace of Dining Philosophers
 
+| transition \ Thread name - id | main - 0                                   | thread-1 - 1                           | thread-2 - 2                           | thread-3 - 3                           | thread-4 - 4                           | thread-5 - 5                           |
+| ----------------------------- | ------------------------------------------ | -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| 0                             | create forks and creates first Philosopher |                                        |                                        |                                        |                                        |                                        |
+| 1-12                          | create remaining Philosophers              |                                        |                                        |                                        |                                        |                                        |
+| 13                            |                                            | obtain lock locks:DiningPhil$Fork@166  |                                        |                                        |                                        |                                        |
+| 14                            |                                            | try to obtain lock DiningPhil$Fork@167 |                                        |                                        |                                        |                                        |
+| 15                            |                                            |                                        | obtain lock locks:DiningPhil$Fork@167  |                                        |                                        |                                        |
+| 16                            |                                            |                                        | try to obtain lock DiningPhil$Fork@168 |                                        |                                        |                                        |
+| 17                            |                                            |                                        |                                        | obtain lock locks:DiningPhil$Fork@168  |                                        |                                        |
+| 18                            |                                            |                                        |                                        | try to obtain lock DiningPhil$Fork@169 |                                        |                                        |
+| 19                            |                                            |                                        |                                        |                                        | obtain lock locks:DiningPhil$Fork@169  |                                        |
+| 20                            |                                            |                                        |                                        |                                        | try to obtain lock DiningPhil$Fork@16a |                                        |
+| 21                            |                                            |                                        |                                        |                                        |                                        | obtain lock locks:DiningPhil$Fork@16a  |
+| 22                            |                                            |                                        |                                        |                                        |                                        | try to obtain lock DiningPhil$Fork@166 |
 
+## Lock dependency graph
 
+![Lock dependency graph](./lock-dependency-graph.png)
 
+## Full error trace
 
-
-
-| Thread name and id   | main      | thread-1  |  thread-2  |   thread-3  |   thread-4  | thread-5  |
-| ------------- |---------------| ------| ------| ------| ------|
-| 0             | create forks and creates first Philosopher | $1600 |
-| 1-12          | create remaining Philosophers  |   $12 |
-| 13            |       |   pickup left fork |||||
-| 14            |       |   pickup right fork |||||
-| 15            |       |    |pickup left fork||||
-| 16            |       |   |pickup right fork||||
-| 17            |       |    ||pickup left fork|||
-| 18            |       |    ||pickup right fork|||
-| 19            |       |   pickup left fork |||||
-| 20            |       |   pickup left fork |||||
-| 21            |       |   pickup left fork |||||
-| 22            |       |   pickup left fork |||||
-| 23            |       |   pickup left fork |||||
-| 24            |       |   pickup left fork |||||
-| 25            |       |   pickup left fork |||||
-
-
-
-
-
-
-
-
-
-##Full error trace
-```
-JavaPathfinder core system v8.0 - (C) 2005-2014 United States Government. All rights reserved.
-
-
+```bash
 ====================================================== system under test
 DiningPhil.main()
 
-====================================================== search started: 5/5/21 8:42 AM
+====================================================== search started: 5/5/21 8:56 AM
 
 ====================================================== error 1
 gov.nasa.jpf.vm.NotDeadlockedProperty
@@ -56,7 +40,7 @@ deadlock encountered:
 ====================================================== trace #1
 ------------------------------------------------------ transition #0 thread: 0
 gov.nasa.jpf.vm.choice.ThreadChoiceFromSet {id:"ROOT" ,1/1,isCascaded:false}
-      [3157 insn w/o sources]
+      [3168 insn w/o sources]
   DiningPhil.java:50             : Fork[] forks = new Fork[N];
   DiningPhil.java:51             : for (int i = 0; i < N; i++) {
   DiningPhil.java:52             : forks[i] = new Fork();
@@ -225,34 +209,34 @@ gov.nasa.jpf.vm.choice.ThreadChoiceFromSet {id:"LOCK" ,2/2,isCascaded:false}
 
 ====================================================== snapshot #1
 thread DiningPhil$Philosopher:{id:1,name:Thread-1,status:BLOCKED,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
-  owned locks:DiningPhil$Fork@162
-  blocked on: DiningPhil$Fork@163
+  owned locks:DiningPhil$Fork@166
+  blocked on: DiningPhil$Fork@167
   call stack:
-	at DiningPhil$Philosopher.run(DiningPhil.java:40)
+        at DiningPhil$Philosopher.run(DiningPhil.java:40)
 
 thread DiningPhil$Philosopher:{id:2,name:Thread-2,status:BLOCKED,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
-  owned locks:DiningPhil$Fork@163
-  blocked on: DiningPhil$Fork@164
+  owned locks:DiningPhil$Fork@167
+  blocked on: DiningPhil$Fork@168
   call stack:
-	at DiningPhil$Philosopher.run(DiningPhil.java:40)
+        at DiningPhil$Philosopher.run(DiningPhil.java:40)
 
 thread DiningPhil$Philosopher:{id:3,name:Thread-3,status:BLOCKED,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
-  owned locks:DiningPhil$Fork@164
-  blocked on: DiningPhil$Fork@165
+  owned locks:DiningPhil$Fork@168
+  blocked on: DiningPhil$Fork@169
   call stack:
-	at DiningPhil$Philosopher.run(DiningPhil.java:40)
+        at DiningPhil$Philosopher.run(DiningPhil.java:40)
 
 thread DiningPhil$Philosopher:{id:4,name:Thread-4,status:BLOCKED,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
-  owned locks:DiningPhil$Fork@165
-  blocked on: DiningPhil$Fork@166
+  owned locks:DiningPhil$Fork@169
+  blocked on: DiningPhil$Fork@16a
   call stack:
-	at DiningPhil$Philosopher.run(DiningPhil.java:40)
+        at DiningPhil$Philosopher.run(DiningPhil.java:40)
 
 thread DiningPhil$Philosopher:{id:5,name:Thread-5,status:BLOCKED,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
-  owned locks:DiningPhil$Fork@166
-  blocked on: DiningPhil$Fork@162
+  owned locks:DiningPhil$Fork@16a
+  blocked on: DiningPhil$Fork@166
   call stack:
-	at DiningPhil$Philosopher.run(DiningPhil.java:40)
+        at DiningPhil$Philosopher.run(DiningPhil.java:40)
 
 
 ====================================================== results
@@ -263,10 +247,10 @@ elapsed time:       00:00:00
 states:             new=2535,visited=5671,backtracked=8183,end=29
 search:             maxDepth=29,constraints=0
 choice generators:  thread=2534 (signal=0,lock=1608,sharedRef=3,threadApi=5,reschedule=918), data=0
-heap:               new=404,released=19609,maxLive=387,gcCycles=8206
-instructions:       55524
-max memory:         240MB
-loaded code:        classes=64,methods=1478
+heap:               new=408,released=19609,maxLive=391,gcCycles=8206
+instructions:       55535
+max memory:         155MB
+loaded code:        classes=65,methods=1484
 
-====================================================== search finished: 5/5/21 8:42 AM
+====================================================== search finished: 5/5/21 8:56 AM
 ```
